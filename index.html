@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1a3a5c" />
+  <meta name="description" content="Procurement Information System - Senaka Group" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PIS" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <title>Senaka Group – PIS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0d2b45;
+      --navy-mid: #1a3a5c;
+      --navy-light: #2a5080;
+      --gold: #c9a84c;
+      --gold-light: #e8c878;
+      --cream: #f5f0e8;
+      --white: #ffffff;
+      --red: #c0392b;
+      --green: #1e8449;
+      --gray: #7f8c8d;
+      --border: #d5cfc3;
+      --shadow: 0 4px 24px rgba(13,43,69,0.13);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .app-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+      color: var(--white);
+      padding: 20px 20px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+    }
+    .app-header .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+    .app-header .sub1 {
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+    }
+    .app-header .sub2 {
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 3px;
+      opacity: 0.85;
+    }
+    .gold-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 10px auto 0;
+      width: 80%;
+    }
+
+    /* ── Form Container ── */
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 16px 100px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--navy-light);
+      margin: 24px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .icon { font-size: 1rem; }
+
+    .field-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--navy-mid);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    label .req {
+      color: var(--red);
+      margin-left: 3px;
+      font-size: 0.9rem;
+    }
+    label .opt {
+      color: var(--gray);
+      font-size: 0.7rem;
+      font-weight: 400;
+      margin-left: 4px;
+      text-transform: none;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--navy);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(42,80,128,0.12);
+    }
+    input.error, select.error, textarea.error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230d2b45' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+      cursor: pointer;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .error-msg {
+      color: var(--red);
+      font-size: 0.72rem;
+      margin-top: 4px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    /* ── Image Upload ── */
+    .img-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 24px 16px;
+      text-align: center;
+      background: var(--white);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .img-upload-area:active, .img-upload-area.hover {
+      border-color: var(--gold);
+      background: #fffdf5;
+    }
+    .img-upload-area .cam-icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .img-upload-area p { font-size: 0.82rem; color: var(--gray); }
+    #imgPreview {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 12px;
+      display: none;
+      box-shadow: var(--shadow);
+    }
+    #removeImg {
+      display: none;
+      margin-top: 8px;
+      color: var(--red);
+      font-size: 0.78rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+
+    /* ── Submit Button ── */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 24px;
+      box-shadow: 0 4px 18px rgba(13,43,69,0.3);
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 8px rgba(13,43,69,0.2);
+    }
+    .submit-btn .gold-bar {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    }
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* ── Spinner / Loading ── */
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy);
+      color: var(--white);
+      padding: 14px 24px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+      z-index: 999;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      max-width: 90%;
+      text-align: center;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.success { background: var(--green); }
+    #toast.error-toast { background: var(--red); }
+
+    /* ── LKR Field ── */
+    .lkr-wrap {
+      position: relative;
+    }
+    .lkr-wrap::before {
+      content: 'LKR';
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gray);
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+    .lkr-wrap input { padding-left: 46px; }
+
+    /* ── Progress Bar ── */
+    .progress-wrap {
+      background: rgba(255,255,255,0.15);
+      height: 4px;
+      margin-top: 10px;
+      border-radius: 2px;
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--gold);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Character counter ── */
+    .char-count {
+      font-size: 0.7rem;
+      color: var(--gray);
+      text-align: right;
+      margin-top: 3px;
+    }
+
+    /* ── Offline Banner ── */
+    #offlineBanner {
+      display: none;
+      background: #f39c12;
+      color: white;
+      text-align: center;
+      padding: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* ── Saved drafts badge ── */
+    .draft-badge {
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 8px;
+      display: none;
+    }
+
+    .field-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .helper-text {
+      font-size: 0.7rem;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    /* Install Banner */
+    #installBanner {
+      display: none;
+      background: var(--navy-mid);
+      color: white;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    #installBanner button {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    #installBanner .dismiss { background: transparent; color: rgba(255,255,255,0.6); font-weight: 400; }
+
+    @media (max-width: 400px) {
+      .field-row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="offlineBanner">⚠ You're offline — your draft will be saved locally</div>
+
+<div id="installBanner">
+  <span>📲 Install PIS App to your home screen</span>
+  <div style="display:flex;gap:6px">
+    <button id="installBtn">Install</button>
+    <button class="dismiss" id="dismissInstall">✕</button>
+  </div>
+</div>
+<div id="iosBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a3a5c;color:#fff;padding:14px 16px;z-index:200;text-align:center;font-size:0.85rem;line-height:1.6;">
+  📲 To install: tap the <strong>Share &#9651;</strong> icon then <strong>"Add to Home Screen"</strong>
+  <button onclick="document.getElementById('iosBanner').style.display='none';localStorage.setItem('ios_banner_dismissed','1')" style="margin-left:12px;background:transparent;color:#c9a84c;border:1px solid #c9a84c;border-radius:6px;padding:2px 10px;cursor:pointer;font-size:0.8rem;">Got it</button>
+</div>
+
+<header class="app-header">
+  <div class="brand">Senaka Group</div>
+  <div class="sub1">Tender Notice Form</div>
+  <div class="sub2">Procurement Information System</div>
+  <div class="gold-line"></div>
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+</header>
+
+<div class="form-container">
+
+  <!-- ── Section 1: Basic Info ── -->
+  <div class="section-title"><span class="icon">📅</span> Basic Information</div>
+
+  <div class="field-group">
+    <label>Date <span class="req">*</span></label>
+    <input type="date" id="f_date" />
+    <div class="error-msg" id="err_date">Please select a date.</div>
+  </div>
+
+  <div class="field-group">
+    <label>Tender Type <span class="req">*</span></label>
+    <select id="f_tender_type">
+      <option value="">— Select Tender Type —</option>
+      <option>Building Construction</option>
+      <option>Building Renovation</option>
+      <option>Concrete Readymix Supply</option>
+      <option>Roads Construction</option>
+      <option>Supply of Pre-Cast Concrete Items</option>
+      <option>Cement Blocks Supply</option>
+      <option>Supply of Vehicles / Machineries</option>
+      <option>Supply of Trading Items</option>
+      <option>Supply of Quarry Aggregates</option>
+      <option>Other Project</option>
+    </select>
+    <div class="error-msg" id="err_tender_type">Please select tender type.</div>
+  </div>
+
+  <div class="field-group">
+    <label>Information Source <span class="req">*</span></label>
+    <select id="f_info_source">
+      <option value="">— Select Source —</option>
+      <option>Newspaper Advertisement</option>
+      <option>Tender.lk Website</option>
+      <option>Promise.lk Website</option>
+      <option>Directly from Client</option>
+      <option>Government e-Procurement System</option>
+      <option>Word of Mouth / Referral</option>
+      <option>Other Source</option>
+    </select>
+    <div class="error-msg" id="err_info_source">Please select information source.</div>
+  </div>
+
+  <!-- ── Section 2: Location ── -->
+  <div class="section-title"><span class="icon">📍</span> Location</div>
+
+  <div class="field-row-2">
+    <div class="field-group">
+      <label>Province <span class="req">*</span></label>
+      <select id="f_province" onchange="updateDistricts()">
+        <option value="">— Province —</option>
+        <option>Western</option>
+        <option>Central</option>
+        <option>Southern</option>
+        <option>Northern</option>
+        <option>Eastern</option>
+        <option>North Western</option>
+        <option>North Central</option>
+        <option>Uva</option>
+        <option>Sabaragamuwa</option>
+      </select>
+      <div class="error-msg" id="err_province">Select province.</div>
+    </div>
+    <div class="field-group">
+      <label>District <span class="req">*</span></label>
+      <select id="f_district">
+        <option value="">— Select Province First —</option>
+      </select>
+      <div class="error-msg" id="err_district">Select district.</div>
+    </div>
+  </div>
+
+  <!-- ── Section 3: Project Details ── -->
+  <div class="section-title"><span class="icon">📋</span> Project Details</div>
+
+  <div class="field-group">
+    <label>Job Scope / Scope of Work <span class="req">*</span></label>
+    <textarea id="f_job_scope" maxlength="600" placeholder="Describe the scope of works…" oninput="countChars('f_job_scope','cc_scope',600)"></textarea>
+    <div class="char-count"><span id="cc_scope">0</span>/600</div>
+    <div class="error-msg" id="err_job_scope">Please describe the job scope.</div>
+  </div>
+
+  <div class="field-group">
+    <label>Client Name <span class="req">*</span></label>
+    <input type="text" id="f_client" placeholder="e.g. Ceylon Electricity Board" />
+    <div class="error-msg" id="err_client">Please enter client name.</div>
+  </div>
+
+  <div class="field-group">
+    <label>Bidding Company <span class="req">*</span></label>
+    <select id="f_company">
+      <option value="">— Select Company —</option>
+      <option>Senaka Builders</option>
+      <option>Senaka Zen</option>
+      <option>Senaka ReadyMix</option>
+      <option>Senaka Cement</option>
+      <option>Industry Serve Engineers</option>
+      <option>Senro Enterprises</option>
+    </select>
+    <div class="error-msg" id="err_company">Please select a company.</div>
+  </div>
+
+  <div class="field-group">
+    <label>Project Period <span class="opt">(optional)</span></label>
+    <input type="text" id="f_period" placeholder="e.g. 12 Months / 365 Days" />
+  </div>
+
+  <!-- ── Section 4: Financial ── -->
+  <div class="section-title"><span class="icon">💰</span> Financial Details</div>
+
+  <div class="field-row-2">
+    <div class="field-group">
+      <label>Estimated Value <span class="opt">(optional)</span></label>
+      <div class="lkr-wrap">
+        <input type="number" id="f_project_value" placeholder="0.00" min="0" step="0.01" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Bid Security <span class="opt">(optional)</span></label>
+      <div class="lkr-wrap">
+        <input type="number" id="f_bid_security" placeholder="0.00" min="0" step="0.01" />
+      </div>
+    </div>
+  </div>
+
+  <div class="field-row-2">
+    <div class="field-group">
+      <label>Doc. Collection Charges <span class="opt">(optional)</span></label>
+      <div class="lkr-wrap">
+        <input type="number" id="f_doc_charges" placeholder="0.00" min="0" step="0.01" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Tender Closing Date <span class="req">*</span></label>
+      <input type="date" id="f_closing_date" />
+      <div class="error-msg" id="err_closing_date">Select closing date.</div>
+    </div>
+  </div>
+
+  <!-- ── Section 5: Requirements ── -->
+  <div class="section-title"><span class="icon">📌</span> Requirements & Collection</div>
+
+  <div class="field-group">
+    <label>Qualification Requirements <span class="opt">(optional)</span></label>
+    <textarea id="f_qualification" maxlength="400" placeholder="Any specific qualifications needed…" oninput="countChars('f_qualification','cc_qual',400)"></textarea>
+    <div class="char-count"><span id="cc_qual">0</span>/400</div>
+  </div>
+
+  <div class="field-group">
+    <label>Location to Collect Tender Document <span class="req">*</span></label>
+    <input type="text" id="f_doc_location" placeholder="Address or office name" />
+    <div class="error-msg" id="err_doc_location">Please enter collection location.</div>
+  </div>
+
+  <!-- ── Section 6: Pre-Bid ── -->
+  <div class="section-title"><span class="icon">🤝</span> Pre-Bid Meeting <span style="font-size:0.7rem;font-weight:400;letter-spacing:0;color:var(--gray);font-family:'DM Sans',sans-serif;text-transform:none">(if applicable)</span></div>
+
+  <div class="field-row-2">
+    <div class="field-group">
+      <label>Pre-Bid Date <span class="opt">(optional)</span></label>
+      <input type="date" id="f_prebid_date" />
+    </div>
+    <div class="field-group">
+      <label>Pre-Bid Location <span class="opt">(optional)</span></label>
+      <input type="text" id="f_prebid_location" placeholder="Venue / address" />
+    </div>
+  </div>
+
+  <!-- ── Section 7: Remarks & Image ── -->
+  <div class="section-title"><span class="icon">🖼</span> Advertisement & Remarks</div>
+
+  <div class="field-group">
+    <label>Advertisement Image <span class="opt">(optional)</span></label>
+    <div class="img-upload-area" id="uploadArea" onclick="document.getElementById('f_image').click()">
+      <div class="cam-icon">📷</div>
+      <p>Tap to capture or select ad image</p>
+    </div>
+    <input type="file" id="f_image" accept="image/*" capture="environment" style="display:none" onchange="previewImage(event)" />
+    <img id="imgPreview" src="" alt="Ad Preview" />
+    <button id="removeImg" onclick="removeImage()">✕ Remove Image</button>
+  </div>
+
+  <div class="field-group">
+    <label>Remarks <span class="opt">(optional)</span></label>
+    <textarea id="f_remarks" maxlength="400" placeholder="Any additional remarks…" oninput="countChars('f_remarks','cc_remarks',400)"></textarea>
+    <div class="char-count"><span id="cc_remarks">0</span>/400</div>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+    Submit Tender Notice
+    <div class="gold-bar"></div>
+  </button>
+
+  <p style="text-align:center;font-size:0.7rem;color:var(--gray);margin-top:12px">
+    Submissions are securely stored in Senaka Group's records system
+  </p>
+</div>
+
+<div id="toast">Message here</div>
+
+<script>
+// ════════════════════════════════════════════
+// CONFIGURATION — Replace with your actual URL
+// ════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8Eo6MIQWCrcfoh-uN7qazaBzRe3kLL8tr4CiTimnXuMTKce05z7Ju1dRgk5ktjDWo/exec';
+
+// ── District Data ──
+const DISTRICTS = {
+  Western:       ['Colombo', 'Gampaha', 'Kalutara'],
+  Central:       ['Kandy', 'Matale', 'Nuwara Eliya'],
+  Southern:      ['Galle', 'Matara', 'Hambantota'],
+  Northern:      ['Jaffna', 'Kilinochchi', 'Mannar', 'Mullaitivu', 'Vavuniya'],
+  Eastern:       ['Ampara', 'Batticaloa', 'Trincomalee'],
+  'North Western':['Kurunegala', 'Puttalam'],
+  'North Central':['Anuradhapura', 'Polonnaruwa'],
+  Uva:           ['Badulla', 'Monaragala'],
+  Sabaragamuwa:  ['Kegalle', 'Ratnapura'],
+};
+
+function updateDistricts() {
+  const p = document.getElementById('f_province').value;
+  const ds = document.getElementById('f_district');
+  ds.innerHTML = '<option value="">— Select District —</option>';
+  if (p && DISTRICTS[p]) {
+    DISTRICTS[p].forEach(d => {
+      const o = document.createElement('option');
+      o.textContent = d;
+      ds.appendChild(o);
+    });
+  }
+  updateProgress();
+}
+
+// ── Character Counter ──
+function countChars(id, counterId, max) {
+  const len = document.getElementById(id).value.length;
+  document.getElementById(counterId).textContent = len;
+  updateProgress();
+}
+
+// ── Progress Bar ──
+const REQUIRED = ['f_date','f_tender_type','f_info_source','f_province','f_district',
+                  'f_job_scope','f_client','f_company','f_closing_date','f_doc_location'];
+function updateProgress() {
+  let filled = REQUIRED.filter(id => {
+    const el = document.getElementById(id);
+    return el && el.value.trim() !== '';
+  }).length;
+  document.getElementById('progressBar').style.width = ((filled / REQUIRED.length) * 100) + '%';
+}
+document.querySelectorAll('input,select,textarea').forEach(el =>
+  el.addEventListener('change', updateProgress));
+document.querySelectorAll('textarea').forEach(el =>
+  el.addEventListener('input', updateProgress));
+
+// ── Image Preview ──
+function previewImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = document.getElementById('imgPreview');
+    img.src = ev.target.result;
+    img.style.display = 'block';
+    document.getElementById('removeImg').style.display = 'block';
+    document.getElementById('uploadArea').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+function removeImage() {
+  document.getElementById('f_image').value = '';
+  document.getElementById('imgPreview').style.display = 'none';
+  document.getElementById('removeImg').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+}
+
+// ── Toast ──
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = type ? `show ${type === 'success' ? 'success' : 'error-toast'}` : 'show';
+  setTimeout(() => { t.className = type === 'success' ? 'success' : (type ? 'error-toast' : ''); }, 3200);
+}
+
+// ── Validation ──
+function validate() {
+  let ok = true;
+  const check = (id, errId, msg) => {
+    const el = document.getElementById(id);
+    const valid = el.value.trim() !== '';
+    document.getElementById(errId).classList.toggle('show', !valid);
+    el.classList.toggle('error', !valid);
+    if (!valid) ok = false;
+  };
+  check('f_date','err_date');
+  check('f_tender_type','err_tender_type');
+  check('f_info_source','err_info_source');
+  check('f_province','err_province');
+  check('f_district','err_district');
+  check('f_job_scope','err_job_scope');
+  check('f_client','err_client');
+  check('f_company','err_company');
+  check('f_closing_date','err_closing_date');
+  check('f_doc_location','err_doc_location');
+  return ok;
+}
+
+// ── Collect Form Data ──
+function getFormData() {
+  return {
+    date:          document.getElementById('f_date').value,
+    tenderType:    document.getElementById('f_tender_type').value,
+    infoSource:    document.getElementById('f_info_source').value,
+    province:      document.getElementById('f_province').value,
+    district:      document.getElementById('f_district').value,
+    jobScope:      document.getElementById('f_job_scope').value,
+    client:        document.getElementById('f_client').value,
+    company:       document.getElementById('f_company').value,
+    projectValue:  document.getElementById('f_project_value').value,
+    bidSecurity:   document.getElementById('f_bid_security').value,
+    qualification: document.getElementById('f_qualification').value,
+    docLocation:   document.getElementById('f_doc_location').value,
+    docCharges:    document.getElementById('f_doc_charges').value,
+    prebidDate:    document.getElementById('f_prebid_date').value,
+    prebidLocation:document.getElementById('f_prebid_location').value,
+    period:        document.getElementById('f_period').value,
+    closingDate:   document.getElementById('f_closing_date').value,
+    remarks:       document.getElementById('f_remarks').value,
+    imageData:     document.getElementById('imgPreview').src || '',
+    submittedAt:   new Date().toISOString(),
+  };
+}
+
+// ── Save / Load Draft ──
+function saveDraft() {
+  try { localStorage.setItem('pis_draft', JSON.stringify(getFormData())); } catch(e){}
+}
+function loadDraft() {
+  try {
+    const d = JSON.parse(localStorage.getItem('pis_draft'));
+    if (!d) return;
+    const map = {
+      f_date: 'date', f_tender_type:'tenderType', f_info_source:'infoSource',
+      f_job_scope:'jobScope', f_client:'client', f_company:'company',
+      f_project_value:'projectValue', f_bid_security:'bidSecurity',
+      f_qualification:'qualification', f_doc_location:'docLocation',
+      f_doc_charges:'docCharges', f_prebid_date:'prebidDate',
+      f_prebid_location:'prebidLocation', f_period:'period',
+      f_closing_date:'closingDate', f_remarks:'remarks',
+    };
+    Object.entries(map).forEach(([id, key]) => {
+      const el = document.getElementById(id);
+      if (el && d[key]) el.value = d[key];
+    });
+    if (d.province) {
+      document.getElementById('f_province').value = d.province;
+      updateDistricts();
+      setTimeout(() => {
+        if (d.district) document.getElementById('f_district').value = d.district;
+      }, 50);
+    }
+    showToast('Draft restored ✓');
+  } catch(e){}
+}
+
+// ── Offline Queue ──
+function queueOffline(data) {
+  const q = JSON.parse(localStorage.getItem('pis_queue') || '[]');
+  q.push(data);
+  localStorage.setItem('pis_queue', JSON.stringify(q));
+}
+async function flushOfflineQueue() {
+  const q = JSON.parse(localStorage.getItem('pis_queue') || '[]');
+  if (!q.length) return;
+  const sent = [];
+  for (const item of q) {
+    try {
+      const fd = new URLSearchParams();
+      fd.append('payload', JSON.stringify(item));
+      await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: fd.toString() });
+      sent.push(item);
+    } catch(e) { break; }
+  }
+  if (sent.length) {
+    const remaining = q.filter(i => !sent.includes(i));
+    localStorage.setItem('pis_queue', JSON.stringify(remaining));
+    showToast(`${sent.length} offline record(s) synced ✓`, 'success');
+  }
+}
+
+// ── Submit ──
+async function submitForm() {
+  if (!validate()) {
+    showToast('Please fill all required fields', 'error');
+    document.querySelector('.error').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Submitting…<div class="gold-bar"></div>';
+
+  const data = getFormData();
+
+  if (!navigator.onLine) {
+    queueOffline(data);
+    showToast('Saved offline — will sync when connected', 'success');
+    btn.disabled = false;
+    btn.innerHTML = 'Submit Tender Notice<div class="gold-bar"></div>';
+    resetForm();
+    return;
+  }
+
+  try {
+    // Google Apps Script does not handle CORS preflight (OPTIONS).
+    // Using 'no-cors' mode with URL-encoded body avoids the preflight entirely.
+    // The response is opaque but the data IS saved to the sheet successfully.
+    const formData = new URLSearchParams();
+    formData.append('payload', JSON.stringify(data));
+
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString(),
+    });
+
+    // With no-cors the response is always opaque — assume success if no exception thrown
+    showToast('✅ Tender notice submitted successfully!', 'success');
+    localStorage.removeItem('pis_draft');
+    resetForm();
+  } catch (err) {
+    console.error(err);
+    queueOffline(data);
+    showToast('Network error — saved offline, will retry', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Submit Tender Notice<div class="gold-bar"></div>';
+  }
+}
+
+function resetForm() {
+  document.querySelectorAll('input,select,textarea').forEach(el => {
+    if (el.type !== 'file') el.value = '';
+  });
+  document.getElementById('f_district').innerHTML = '<option value="">— Select Province First —</option>';
+  removeImage();
+  document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.error').forEach(e => e.classList.remove('error'));
+  document.querySelectorAll('.char-count span').forEach(s => s.textContent = '0');
+  document.getElementById('progressBar').style.width = '0%';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── Auto-save draft every 30s ──
+setInterval(saveDraft, 30000);
+
+// ── Online/offline events ──
+window.addEventListener('offline', () => {
+  document.getElementById('offlineBanner').style.display = 'block';
+});
+window.addEventListener('online', () => {
+  document.getElementById('offlineBanner').style.display = 'none';
+  flushOfflineQueue();
+});
+
+// ── Set today's date as default ──
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('f_date').value = new Date().toISOString().split('T')[0];
+  updateProgress();
+  loadDraft();
+  if (!navigator.onLine) document.getElementById('offlineBanner').style.display = 'block';
+  else flushOfflineQueue();
+});
+
+// ── PWA Install Prompt ──
+let deferredPrompt;
+
+// Android/Chrome: fires beforeinstallprompt
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('installBanner').style.display = 'none';
+});
+
+document.getElementById('dismissInstall').addEventListener('click', () => {
+  document.getElementById('installBanner').style.display = 'none';
+  localStorage.setItem('install_dismissed', '1');
+});
+
+// iOS Safari: no beforeinstallprompt — detect and show manual instructions
+const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+const iosDismissed = localStorage.getItem('ios_banner_dismissed');
+if (isIos && !isInStandaloneMode && !iosDismissed) {
+  setTimeout(() => {
+    document.getElementById('iosBanner').style.display = 'block';
+  }, 2000);
+}
+
+// Also handle appinstalled event to hide banner
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').style.display = 'none';
+  deferredPrompt = null;
+});
+
+// ── Service Worker Registration ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW error:', err));
+  });
+}
+</script>
+</body>
+</html>
